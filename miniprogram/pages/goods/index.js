@@ -66,6 +66,15 @@ Page({
   },
 
   onLoad() {
+    // 检查登录状态
+    const isLoggedIn = wx.getStorageSync('isLoggedIn');
+    if (!isLoggedIn) {
+      wx.redirectTo({
+        url: '/pages/login/index'
+      });
+      return;
+    }
+
     // 从本地存储获取今日使用额度
     const today = new Date().toDateString();
     const userData = wx.getStorageSync("userData") || {};

@@ -73,6 +73,19 @@ App({
     }
   },
 
+  onShow: function () {
+    // 检查登录状态
+    const isLoggedIn = wx.getStorageSync('isLoggedIn');
+    const currentPage = getCurrentPages()[0];
+    
+    // 如果不是登录页面且未登录，跳转到登录页面
+    if (currentPage && currentPage.route !== 'pages/login/index' && !isLoggedIn) {
+      wx.redirectTo({
+        url: '/pages/login/index'
+      });
+    }
+  },
+
   // 初始化用户数据
   initUserData: function () {
     const today = new Date().toDateString();
