@@ -78,14 +78,8 @@
   margin-bottom: 20rpx;
   padding: 20rpx;
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
   width: 100%;
   box-sizing: border-box;
-}
-
-.order-item:hover {
-  transform: translateY(-2rpx);
-  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.15);
 }
 
 .order-header {

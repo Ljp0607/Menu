@@ -12,19 +12,19 @@
   </view>
 
   <view class="goods-list">
-    <view class="goods-item" wx:for="{{goodsList}}" wx:key="id" bindtap="showGoodsDetail" data-index="{{index}}">
-      <image class="goods-image" src="{{item.image}}" mode="aspectFill"></image>
+    <view class="goods-item" wx:for="{{goodsList}}" wx:key="id">
+      <image class="goods-image" src="{{item.image}}" mode="aspectFill" bindtap="showGoodsDetail" data-index="{{index}}"></image>
       <view class="goods-info">
         <view class="goods-header">
-          <text class="goods-name">{{item.name}}</text>
+          <text class="goods-name" bindtap="showGoodsDetail" data-index="{{index}}">{{item.name}}</text>
           <text class="goods-price">¥{{item.price}}</text>
         </view>
-        <text class="goods-description">{{item.description}}</text>
+        <text class="goods-description" bindtap="showGoodsDetail" data-index="{{index}}">{{item.description}}</text>
         <view class="goods-actions">
           <view class="quantity-control">
-            <button class="btn btn-reduce" bindtap="reduceGoods" data-index="{{index}}" disabled="{{item.count <= 0}}">-</button>
+            <view class="btn btn-reduce" bindtap="reduceGoods" data-index="{{index}}" disabled="{{item.count <= 0}}">-</view>
             <text class="quantity">{{item.count}}</text>
-            <button class="btn btn-add" bindtap="addGoods" data-index="{{index}}">+</button>
+            <view class="btn btn-add" bindtap="addGoods" data-index="{{index}}">+</view>
           </view>
         </view>
       </view>

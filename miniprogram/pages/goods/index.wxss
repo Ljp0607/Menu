@@ -124,6 +124,7 @@
   justify-content: flex-end;
 }
 
+/* 数量控制按钮样式 */
 .quantity-control {
   display: flex;
   align-items: center;
@@ -133,40 +134,66 @@
 }
 
 .btn {
-  width: 60rpx;
+  width: 120rpx;
   height: 60rpx;
   padding: 0;
-  font-size: 32rpx;
+  font-size: 36rpx;
   line-height: 60rpx;
-  border-radius: 50%;
-  border: none;
+  border-radius: 10%;
+  border: 2rpx solid #07c160;
   background-color: #fff;
-  color: #333;
+  color: #07c160;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2rpx 5rpx rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .btn:active {
   transform: scale(0.95);
+  background-color: #07c160;
+  color: #fff;
+}
+
+.btn-reduce {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+
+.btn-reduce:active {
+  background-color: #ff6b6b;
+  color: #fff;
 }
 
 .btn-reduce:disabled {
+  border-color: #ccc;
   color: #ccc;
 }
 
+.btn-reduce:disabled:active {
+  background-color: #fff;
+  color: #ccc;
+  transform: none;
+}
+
 .btn-add {
+  border-color: #07c160;
   color: #07c160;
 }
 
+.btn-add:active {
+  background-color: #07c160;
+  color: #fff;
+}
+
 .quantity {
-  margin: 0 20rpx;
+  margin: 0 30rpx;
   font-size: 28rpx;
   color: #333;
   min-width: 40rpx;
   text-align: center;
+  font-weight: bold;
 }
 
 .footer {
