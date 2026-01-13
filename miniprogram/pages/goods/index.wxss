@@ -1,0 +1,179 @@
+/* pages/goods/index.wxss */
+.container {
+  padding-bottom: 100rpx;
+  background-color: #f5f5f5;
+}
+
+.header {
+  background-color: #fff;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.limit-info, .remaining-info {
+  display: flex;
+  align-items: center;
+}
+
+.limit-label, .remaining-label {
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 10rpx;
+}
+
+.limit-amount {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #07c160;
+}
+
+.remaining-amount {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+.goods-list {
+  padding: 0 20rpx;
+}
+
+.goods-item {
+  display: flex;
+  background-color: #fff;
+  border-radius: 10rpx;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.goods-image {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 10rpx;
+  margin-right: 20rpx;
+  object-fit: cover;
+}
+
+.goods-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.goods-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.goods-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.goods-price {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+.goods-description {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+  line-height: 1.4;
+}
+
+.goods-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+  width: 60rpx;
+  height: 60rpx;
+  padding: 0;
+  font-size: 32rpx;
+  line-height: 60rpx;
+  border-radius: 50%;
+  border: 1rpx solid #ddd;
+  background-color: #fff;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-reduce:disabled {
+  color: #ccc;
+}
+
+.btn-add {
+  color: #07c160;
+  border-color: #07c160;
+}
+
+.quantity {
+  margin: 0 20rpx;
+  font-size: 28rpx;
+  width: 60rpx;
+  text-align: center;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.total-info {
+  display: flex;
+  align-items: center;
+}
+
+.total-label {
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 10rpx;
+}
+
+.total-price {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+.submit-btn {
+  width: 200rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 32rpx;
+  background-color: #07c160;
+  color: #fff;
+  border: none;
+  border-radius: 40rpx;
+  padding: 0;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  color: #fff;
+}

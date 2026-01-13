@@ -1,0 +1,41 @@
+<!-- pages/goods/index.wxml -->
+<view class="container">
+  <view class="header">
+    <view class="limit-info">
+      <text class="limit-label">今日额度：</text>
+      <text class="limit-amount">¥100</text>
+    </view>
+    <view class="remaining-info">
+      <text class="remaining-label">剩余额度：</text>
+      <text class="remaining-amount">{{remainingLimit > 0 ? '¥' + remainingLimit : '已用完'}}</text>
+    </view>
+  </view>
+
+  <view class="goods-list">
+    <view class="goods-item" wx:for="{{goodsList}}" wx:key="id">
+      <image class="goods-image" src="{{item.image}}" mode="aspectFill"></image>
+      <view class="goods-info">
+        <view class="goods-header">
+          <text class="goods-name">{{item.name}}</text>
+          <text class="goods-price">¥{{item.price}}</text>
+        </view>
+        <text class="goods-description">{{item.description}}</text>
+        <view class="goods-actions">
+          <view class="quantity-control">
+            <button class="btn btn-reduce" bindtap="reduceGoods" data-index="{{index}}" disabled="{{item.count <= 0}}">-</button>
+            <text class="quantity">{{item.count}}</text>
+            <button class="btn btn-add" bindtap="addGoods" data-index="{{index}}">+</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="footer">
+    <view class="total-info">
+      <text class="total-label">合计：</text>
+      <text class="total-price">¥{{totalPrice}}</text>
+    </view>
+    <button class="submit-btn" bindtap="submitOrder" disabled="{{totalPrice <= 0}}">提交订单</button>
+  </view>
+</view>
