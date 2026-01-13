@@ -161,6 +161,15 @@ Page({
       return;
     }
 
+    // 检查用户角色，管理员不能访问商品页面
+    const userType = wx.getStorageSync("userType");
+    if (userType === "admin") {
+      wx.switchTab({
+        url: "/pages/orders/index",
+      });
+      return;
+    }
+
     // 从本地存储获取今日使用额度
     const today = new Date().toDateString();
     const userData = wx.getStorageSync("userData") || {};

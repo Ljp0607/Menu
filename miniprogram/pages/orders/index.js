@@ -6,13 +6,14 @@ Page({
 
   onLoad() {
     // 检查登录状态
-    const isLoggedIn = wx.getStorageSync('isLoggedIn');
+    const isLoggedIn = wx.getStorageSync("isLoggedIn");
     if (!isLoggedIn) {
       wx.redirectTo({
-        url: '/pages/login/index'
+        url: "/pages/login/index",
       });
       return;
     }
+
     this.loadOrders();
   },
 

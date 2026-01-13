@@ -34,6 +34,9 @@ Page({
     const today = new Date().toDateString();
     const userData = wx.getStorageSync("userData") || {};
 
+    // 获取登录用户名
+    const username = wx.getStorageSync("username") || "用户";
+
     if (userData.today !== today) {
       // 新的一天，重置额度
       userData.today = today;
@@ -43,6 +46,10 @@ Page({
 
     const usedAmount = userData.usedAmount || 0;
     this.setData({
+      userInfo: {
+        nickName: username,
+        avatarUrl: "/images/avatar.png",
+      },
       usedAmount: usedAmount,
       remainingLimit: this.data.dailyLimit - usedAmount,
     });

@@ -34,10 +34,6 @@
       
       <button class="login-btn" bindtap="login">登录</button>
       
-      <view class="tips">
-        <text>用户名：user / admin</text>
-        <text>密码：123456</text>
-      </view>
     </view>
   </view>
 </view>

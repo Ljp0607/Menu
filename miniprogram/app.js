@@ -83,6 +83,20 @@ App({
       wx.redirectTo({
         url: '/pages/login/index'
       });
+      return;
+    }
+    
+    // 已登录，根据用户角色和当前页面进行权限控制
+    if (isLoggedIn) {
+      const userType = wx.getStorageSync('userType');
+      const currentRoute = currentPage ? currentPage.route : '';
+      
+      // 管理员不能访问商品页面
+      if (userType === 'admin' && currentRoute === 'pages/goods/index') {
+        wx.switchTab({
+          url: '/pages/orders/index'
+        });
+      }
     }
   },
 
