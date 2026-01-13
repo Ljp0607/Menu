@@ -7,7 +7,8 @@ Page({
         name: "宫保鸡丁",
         price: 25,
         image: "/images/default-goods-image.png",
-        description: "经典川菜，色香味俱全",
+        description:
+          "经典川菜，色香味俱全，选用上等鸡胸肉，搭配花生米、干辣椒等食材，经过精心烹饪而成，口感丰富，麻辣鲜香。",
         count: 0,
       },
       {
@@ -15,7 +16,8 @@ Page({
         name: "鱼香肉丝",
         price: 22,
         image: "/images/default-goods-image.png",
-        description: "酸甜可口，下饭神器",
+        description:
+          "酸甜可口，下饭神器，以猪肉丝为主料，配以胡萝卜、青椒等蔬菜，加入特制鱼香调料，口感层次分明，味道浓郁。",
         count: 0,
       },
       {
@@ -23,7 +25,8 @@ Page({
         name: "麻婆豆腐",
         price: 18,
         image: "/images/default-goods-image.png",
-        description: "麻辣鲜香，豆腐嫩滑",
+        description:
+          "麻辣鲜香，豆腐嫩滑，选用嫩豆腐，搭配牛肉末、豆瓣酱等调料，经过大火炒制，豆腐吸收了调料的味道，麻辣适中，口感丰富。",
         count: 0,
       },
       {
@@ -31,7 +34,8 @@ Page({
         name: "红烧肉",
         price: 35,
         image: "/images/default-goods-image.png",
-        description: "肥而不腻，入口即化",
+        description:
+          "肥而不腻，入口即化，选用上等五花肉，经过焯水、煸炒、炖煮等多道工序，加入酱油、冰糖等调料，肉质酥烂，味道香甜。",
         count: 0,
       },
       {
@@ -39,7 +43,8 @@ Page({
         name: "炒青菜",
         price: 12,
         image: "/images/default-goods-image.png",
-        description: "清爽可口，健康营养",
+        description:
+          "清爽可口，健康营养，选用新鲜青菜，经过快速炒制，保留了青菜的营养成分和清脆口感，简单美味。",
         count: 0,
       },
       {
@@ -47,13 +52,17 @@ Page({
         name: "西红柿炒鸡蛋",
         price: 15,
         image: "/images/default-goods-image.png",
-        description: "经典家常菜，老少皆宜",
+        description:
+          "经典家常菜，老少皆宜，选用新鲜西红柿和鸡蛋，经过炒制，西红柿的酸甜和鸡蛋的嫩滑完美结合，口感丰富。",
         count: 0,
       },
     ],
     totalPrice: 0,
     dailyLimit: 100,
     remainingLimit: 100,
+    showDetail: false,
+    selectedGoods: null,
+    selectedIndex: -1,
   },
 
   onLoad() {
@@ -74,14 +83,14 @@ Page({
     });
   },
 
-  // 增加商品数量
-  addGoods(e) {
-    const index = e.currentTarget.dataset.index;
+  // 更新商品数量
+  updateGoodsCount(index, change) {
     const goods = this.data.goodsList[index];
-    const newCount = goods.count + 1;
-    const newTotalPrice = this.data.totalPrice + goods.price;
+    const newCount = Math.max(0, goods.count + change);
+    const priceChange = (newCount - goods.count) * goods.price;
+    const newTotalPrice = this.data.totalPrice + priceChange;
 
-    if (newTotalPrice > this.data.dailyLimit) {
+    if (newTotalPrice > this.data.dailyLimit && change > 0) {
       wx.showToast({
         title: "超过每日额度",
         icon: "none",
@@ -97,25 +106,67 @@ Page({
       totalPrice: newTotalPrice,
       remainingLimit: this.data.dailyLimit - newTotalPrice,
     });
+
+    // 如果当前显示详情弹窗，同步更新弹窗中的商品数量
+    if (this.data.showDetail && this.data.selectedIndex === index) {
+      this.setData({
+        selectedGoods: goodsList[index],
+      });
+    }
+  },
+
+  // 增加商品数量
+  addGoods(e) {
+    const index = e.currentTarget.dataset.index;
+    this.updateGoodsCount(index, 1);
   },
 
   // 减少商品数量
   reduceGoods(e) {
     const index = e.currentTarget.dataset.index;
+    this.updateGoodsCount(index, -1);
+  },
+
+  // 显示商品详情
+  showGoodsDetail(e) {
+    const index = e.currentTarget.dataset.index;
     const goods = this.data.goodsList[index];
-
-    if (goods.count <= 0) return;
-
-    const newCount = goods.count - 1;
-    const newTotalPrice = this.data.totalPrice - goods.price;
-
-    const goodsList = [...this.data.goodsList];
-    goodsList[index].count = newCount;
-
     this.setData({
-      goodsList: goodsList,
-      totalPrice: newTotalPrice,
-      remainingLimit: this.data.dailyLimit - newTotalPrice,
+      showDetail: true,
+      selectedGoods: goods,
+      selectedIndex: index,
+    });
+  },
+
+  // 关闭商品详情
+  closeGoodsDetail() {
+    this.setData({
+      showDetail: false,
+      selectedGoods: null,
+      selectedIndex: -1,
+    });
+  },
+
+  // 在详情弹窗中增加商品数量
+  addGoodsInDetail() {
+    if (this.data.selectedIndex !== -1) {
+      this.updateGoodsCount(this.data.selectedIndex, 1);
+    }
+  },
+
+  // 在详情弹窗中减少商品数量
+  reduceGoodsInDetail() {
+    if (this.data.selectedIndex !== -1) {
+      this.updateGoodsCount(this.data.selectedIndex, -1);
+    }
+  },
+
+  // 加入购物车
+  addGoodsToCart() {
+    this.closeGoodsDetail();
+    wx.showToast({
+      title: "已加入购物车",
+      icon: "success",
     });
   },
 

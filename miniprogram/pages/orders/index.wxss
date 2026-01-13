@@ -2,16 +2,21 @@
 .container {
   background-color: #f5f5f5;
   min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header {
   background-color: #fff;
-  padding: 20rpx;
+  padding: 20rpx 30rpx;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
   margin-bottom: 20rpx;
+  border-radius: 0 0 15rpx 15rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .title {
@@ -26,6 +31,11 @@
   background-color: transparent;
   border: none;
   padding: 0;
+  transition: all 0.2s ease;
+}
+
+.clear-btn:active {
+  color: #ff4757;
 }
 
 .empty {
@@ -33,7 +43,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 100rpx 0;
+  padding: 150rpx 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .empty-image {
@@ -55,15 +67,25 @@
 }
 
 .orders-list {
-  padding: 0 20rpx;
+  padding: 0 30rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .order-item {
   background-color: #fff;
-  border-radius: 10rpx;
+  border-radius: 15rpx;
   margin-bottom: 20rpx;
   padding: 20rpx;
   box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.order-item:hover {
+  transform: translateY(-2rpx);
+  box-shadow: 0 4rpx 15rpx rgba(0, 0, 0, 0.15);
 }
 
 .order-header {
@@ -97,18 +119,29 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15rpx;
+  padding: 10rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.goods-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
 }
 
 .goods-name {
   font-size: 28rpx;
   color: #333;
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .goods-price {
   font-size: 28rpx;
   color: #ff6b6b;
   font-weight: bold;
+  flex-shrink: 0;
 }
 
 .order-footer {

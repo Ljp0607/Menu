@@ -12,7 +12,7 @@
   </view>
 
   <view class="goods-list">
-    <view class="goods-item" wx:for="{{goodsList}}" wx:key="id">
+    <view class="goods-item" wx:for="{{goodsList}}" wx:key="id" bindtap="showGoodsDetail" data-index="{{index}}">
       <image class="goods-image" src="{{item.image}}" mode="aspectFill"></image>
       <view class="goods-info">
         <view class="goods-header">
@@ -37,5 +37,31 @@
       <text class="total-price">¥{{totalPrice}}</text>
     </view>
     <button class="submit-btn" bindtap="submitOrder" disabled="{{totalPrice <= 0}}">提交订单</button>
+  </view>
+
+  <!-- 商品详情弹窗 -->
+  <view class="popup-overlay" wx:if="{{showDetail}}" bindtap="closeGoodsDetail"></view>
+  <view class="popup" wx:if="{{showDetail}}">
+    <view class="popup-header">
+      <text class="popup-title">{{selectedGoods.name}}</text>
+      <button class="btn-close" bindtap="closeGoodsDetail">×</button>
+    </view>
+    <view class="popup-content">
+      <image class="detail-image" src="{{selectedGoods.image}}" mode="aspectFill"></image>
+      <view class="detail-info">
+        <view class="detail-price">¥{{selectedGoods.price}}</view>
+        <view class="detail-description">{{selectedGoods.description}}</view>
+      </view>
+      <view class="detail-actions">
+        <view class="quantity-control">
+          <button class="btn btn-reduce" bindtap="reduceGoodsInDetail" disabled="{{selectedGoods.count <= 0}}">-</button>
+          <text class="quantity">{{selectedGoods.count}}</text>
+          <button class="btn btn-add" bindtap="addGoodsInDetail">+</button>
+        </view>
+      </view>
+    </view>
+    <view class="popup-footer">
+      <button class="btn-add-to-cart" bindtap="addGoodsToCart">加入购物车</button>
+    </view>
   </view>
 </view>
