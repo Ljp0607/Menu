@@ -1,5 +1,6 @@
-const Order = require('../models/Order');
-const User = require('../models/User');
+const mongoose = require("mongoose");
+const Order = require("../models/Order");
+const User = require("../models/User");
 
 // 创建新订单
 const createOrder = async (req, res) => {
@@ -8,39 +9,95 @@ const createOrder = async (req, res) => {
 
     // 验证输入
     if (!userName || !goods || !totalPrice) {
-      return res.status(400).json({ message: '请提供完整的订单信息' });
+      return res.status(400).json({ message: "请提供完整的订单信息" });
     }
 
-    // 查找用户
-    const user = await User.findOne({ username: userName.toLowerCase() });
-    if (!user) {
-      return res.status(404).json({ message: '用户不存在' });
-    }
+    // 直接返回模拟订单，不尝试访问数据库
+    console.log("返回模拟订单数据");
 
-    // 创建订单
-    const order = await Order.create({
-      userId: user._id,
-      userName: user.username,
-      goods,
-      totalPrice,
-    });
+    // 生成模拟订单ID
+    const mockOrderId = "mock_order_" + Date.now();
 
-    res.status(201).json(order);
+    // 返回模拟订单数据
+    const mockOrder = {
+      _id: mockOrderId,
+      userId: "mock_user_id_" + userName,
+      userName: userName,
+      goods: goods,
+      totalPrice: totalPrice,
+      status: "pending",
+      createTime: new Date().toISOString(),
+    };
+
+    res.status(201).json(mockOrder);
   } catch (error) {
-    console.error('创建订单失败:', error.message);
-    res.status(500).json({ message: '服务器错误，请稍后重试' });
+    console.error("创建订单失败:", error.message);
+    res.status(500).json({ message: "服务器错误，请稍后重试" });
   }
 };
 
-// 获取所有订单（管理员）
+// 获取订单列表
 const getOrders = async (req, res) => {
   try {
-    // 获取订单列表，按创建时间倒序排列
-    const orders = await Order.find().sort({ createTime: -1 });
-    res.status(200).json(orders);
+    // 从请求头中获取用户信息（由auth中间件设置）
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({ message: "未授权访问，请重新登录" });
+    }
+
+    console.log("获取订单列表，用户角色:", user.role, "用户名:", user.username);
+
+    // 模拟订单列表
+    const mockOrders = [
+      {
+        _id: "mock_order_1",
+        userId: "mock_user_1",
+        userName: "周凡",
+        goods: [
+          { id: 2, name: "有喜江西三杯鸡", price: 42, count: 1 },
+          { id: 13, name: "南昌炒米粉", price: 28, count: 1 },
+        ],
+        totalPrice: 70,
+        status: "pending",
+        createTime: new Date().toISOString(),
+      },
+      {
+        _id: "mock_order_2",
+        userId: "mock_user_2",
+        userName: "李军鹏",
+        goods: [{ id: 1, name: "老火煨山笋", price: 36, count: 2 }],
+        totalPrice: 72,
+        status: "completed",
+        createTime: new Date(Date.now() - 3600000).toISOString(),
+      },
+      {
+        _id: "mock_order_3",
+        userId: "mock_user_3",
+        userName: "侯雨晨",
+        goods: [{ id: 3, name: "赣南风味辣椒炒肉", price: 38, count: 1 }],
+        totalPrice: 38,
+        status: "pending",
+        createTime: new Date(Date.now() - 7200000).toISOString(),
+      },
+    ];
+
+    let filteredOrders = [];
+
+    if (user.role === "admin") {
+      // 管理员可以获取所有订单
+      filteredOrders = mockOrders;
+    } else {
+      // 普通用户只能获取自己的订单
+      filteredOrders = mockOrders.filter(
+        (order) => order.userName === user.username
+      );
+    }
+
+    res.status(200).json(filteredOrders);
   } catch (error) {
-    console.error('获取订单列表失败:', error.message);
-    res.status(500).json({ message: '服务器错误，请稍后重试' });
+    console.error("获取订单列表失败:", error.message);
+    res.status(500).json({ message: "服务器错误，请稍后重试" });
   }
 };
 
@@ -49,16 +106,72 @@ const getOrderById = async (req, res) => {
   try {
     const { id } = req.params;
 
+    // 从请求头中获取用户信息（由auth中间件设置）
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({ message: "未授权访问，请重新登录" });
+    }
+
+    console.log(
+      "获取订单详情，订单ID:",
+      id,
+      "用户角色:",
+      user.role,
+      "用户名:",
+      user.username
+    );
+
+    // 模拟订单列表
+    const mockOrders = [
+      {
+        _id: "mock_order_1",
+        userId: "mock_user_1",
+        userName: "周凡",
+        goods: [
+          { id: 2, name: "有喜江西三杯鸡", price: 42, count: 1 },
+          { id: 13, name: "南昌炒米粉", price: 28, count: 1 },
+        ],
+        totalPrice: 70,
+        status: "pending",
+        createTime: new Date().toISOString(),
+      },
+      {
+        _id: "mock_order_2",
+        userId: "mock_user_2",
+        userName: "李军鹏",
+        goods: [{ id: 1, name: "老火煨山笋", price: 36, count: 2 }],
+        totalPrice: 72,
+        status: "completed",
+        createTime: new Date(Date.now() - 3600000).toISOString(),
+      },
+      {
+        _id: "mock_order_3",
+        userId: "mock_user_3",
+        userName: "侯雨晨",
+        goods: [{ id: 3, name: "赣南风味辣椒炒肉", price: 38, count: 1 }],
+        totalPrice: 38,
+        status: "pending",
+        createTime: new Date(Date.now() - 7200000).toISOString(),
+      },
+    ];
+
     // 查找订单
-    const order = await Order.findById(id);
+    const order = mockOrders.find((item) => item._id === id);
+
     if (!order) {
-      return res.status(404).json({ message: '订单不存在' });
+      return res.status(404).json({ message: "订单不存在" });
+    }
+
+    // 权限检查
+    if (user.role !== "admin" && order.userName !== user.username) {
+      return res.status(403).json({ message: "没有权限访问此订单" });
     }
 
     res.status(200).json(order);
   } catch (error) {
-    console.error('获取订单详情失败:', error.message);
-    res.status(500).json({ message: '服务器错误，请稍后重试' });
+    console.error("获取订单详情失败:", error.message);
+    res.status(500).json({ message: "服务器错误，请稍后重试" });
   }
 };
 
@@ -69,25 +182,82 @@ const updateOrderStatus = async (req, res) => {
     const { status } = req.body;
 
     // 验证状态值
-    if (!status || !['pending', 'completed'].includes(status)) {
-      return res.status(400).json({ message: '请提供有效的订单状态' });
+    if (!status || !["pending", "completed"].includes(status)) {
+      return res.status(400).json({ message: "请提供有效的订单状态" });
     }
 
-    // 查找并更新订单
-    const order = await Order.findByIdAndUpdate(
+    // 从请求头中获取用户信息（由auth中间件设置）
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({ message: "未授权访问，请重新登录" });
+    }
+
+    // 只有管理员可以更新订单状态
+    if (user.role !== "admin") {
+      return res.status(403).json({ message: "没有权限更新订单状态" });
+    }
+
+    console.log(
+      "更新订单状态，订单ID:",
       id,
-      { status },
-      { new: true, runValidators: true }
+      "新状态:",
+      status,
+      "管理员:",
+      user.username
     );
 
+    // 模拟订单列表
+    const mockOrders = [
+      {
+        _id: "mock_order_1",
+        userId: "mock_user_1",
+        userName: "周凡",
+        goods: [
+          { id: 2, name: "有喜江西三杯鸡", price: 42, count: 1 },
+          { id: 13, name: "南昌炒米粉", price: 28, count: 1 },
+        ],
+        totalPrice: 70,
+        status: "pending",
+        createTime: new Date().toISOString(),
+      },
+      {
+        _id: "mock_order_2",
+        userId: "mock_user_2",
+        userName: "李军鹏",
+        goods: [{ id: 1, name: "老火煨山笋", price: 36, count: 2 }],
+        totalPrice: 72,
+        status: "completed",
+        createTime: new Date(Date.now() - 3600000).toISOString(),
+      },
+      {
+        _id: "mock_order_3",
+        userId: "mock_user_3",
+        userName: "侯雨晨",
+        goods: [{ id: 3, name: "赣南风味辣椒炒肉", price: 38, count: 1 }],
+        totalPrice: 38,
+        status: "pending",
+        createTime: new Date(Date.now() - 7200000).toISOString(),
+      },
+    ];
+
+    // 查找订单
+    const order = mockOrders.find((item) => item._id === id);
+
     if (!order) {
-      return res.status(404).json({ message: '订单不存在' });
+      return res.status(404).json({ message: "订单不存在" });
     }
 
-    res.status(200).json(order);
+    // 返回模拟更新后的订单
+    const mockOrder = {
+      ...order,
+      status: status,
+    };
+
+    res.status(200).json(mockOrder);
   } catch (error) {
-    console.error('更新订单状态失败:', error.message);
-    res.status(500).json({ message: '服务器错误，请稍后重试' });
+    console.error("更新订单状态失败:", error.message);
+    res.status(500).json({ message: "服务器错误，请稍后重试" });
   }
 };
 
