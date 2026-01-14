@@ -1,11 +1,8 @@
 // app.js
 App({
   globalData: {
-    // env 参数说明：
-    //   env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会默认请求到哪个云环境的资源
-    //   此处请填入环境 ID, 环境 ID 可打开云控制台查看
-    //   如不填则使用默认环境（第一个创建的环境）
-    env: "",
+    // API基础URL
+    apiBaseUrl: 'http://localhost:3000/api',
     // 用户数据
     userData: {
       today: new Date().toDateString(),
@@ -13,51 +10,6 @@ App({
     },
     // 每日额度
     dailyLimit: 100,
-    // 默认商品数据
-    defaultGoods: [
-      {
-        id: 1,
-        name: "宫保鸡丁",
-        price: 25,
-        image: "/images/default-goods-image.png",
-        description: "经典川菜，色香味俱全",
-      },
-      {
-        id: 2,
-        name: "鱼香肉丝",
-        price: 22,
-        image: "/images/default-goods-image.png",
-        description: "酸甜可口，下饭神器",
-      },
-      {
-        id: 3,
-        name: "麻婆豆腐",
-        price: 18,
-        image: "/images/default-goods-image.png",
-        description: "麻辣鲜香，豆腐嫩滑",
-      },
-      {
-        id: 4,
-        name: "红烧肉",
-        price: 35,
-        image: "/images/default-goods-image.png",
-        description: "肥而不腻，入口即化",
-      },
-      {
-        id: 5,
-        name: "炒青菜",
-        price: 12,
-        image: "/images/default-goods-image.png",
-        description: "清爽可口，健康营养",
-      },
-      {
-        id: 6,
-        name: "西红柿炒鸡蛋",
-        price: 15,
-        image: "/images/default-goods-image.png",
-        description: "经典家常菜，老少皆宜",
-      },
-    ],
   },
 
   onLaunch: function () {

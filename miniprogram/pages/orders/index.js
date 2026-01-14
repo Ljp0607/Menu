@@ -23,9 +23,44 @@ Page({
 
   // 加载订单数据
   loadOrders() {
-    const orders = wx.getStorageSync("orders") || [];
-    this.setData({
-      orders: orders,
+    const app = getApp();
+    const token = wx.getStorageSync('token');
+    
+    // 发送请求到后端API获取订单列表
+    wx.request({
+      url: app.globalData.apiBaseUrl + '/orders',
+      method: 'GET',
+      header: {
+        'Authorization': 'Bearer ' + token
+      },
+      success: (res) => {
+        if (res.statusCode === 200) {
+          // 将后端返回的订单数据转换为前端需要的格式
+          const orders = res.data.map(order => ({
+            id: order._id,
+            goods: order.goods,
+            totalPrice: order.totalPrice,
+            createTime: new Date(order.createTime).toLocaleString(),
+            status: order.status
+          }));
+          
+          this.setData({
+            orders: orders,
+          });
+        } else {
+          wx.showToast({
+            title: "获取订单失败",
+            icon: "none",
+          });
+        }
+      },
+      fail: (err) => {
+        console.error('获取订单失败:', err);
+        wx.showToast({
+          title: "获取订单失败，请检查网络连接",
+          icon: "none",
+        });
+      }
     });
   },
 

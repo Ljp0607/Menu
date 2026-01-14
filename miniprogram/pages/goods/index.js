@@ -286,40 +286,63 @@ Page({
 
     // 获取选中的商品
     const selectedGoods = this.data.goodsList.filter((item) => item.count > 0);
+    const app = getApp();
 
-    // 创建订单
-    const order = {
-      id: Date.now(),
-      goods: selectedGoods,
+    // 准备订单数据
+    const orderData = {
+      userName: wx.getStorageSync("username"),
+      goods: selectedGoods.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        count: item.count,
+      })),
       totalPrice: this.data.totalPrice,
-      createTime: new Date().toLocaleString(),
     };
 
-    // 保存订单到本地存储
-    const orders = wx.getStorageSync("orders") || [];
-    orders.unshift(order);
-    wx.setStorageSync("orders", orders);
+    // 发送请求到后端API
+    wx.request({
+      url: app.globalData.apiBaseUrl + "/orders",
+      method: "POST",
+      data: orderData,
+      success: (res) => {
+        if (res.statusCode === 201) {
+          // 更新用户使用额度
+          const userData = wx.getStorageSync("userData") || {};
+          userData.usedAmount =
+            (userData.usedAmount || 0) + this.data.totalPrice;
+          wx.setStorageSync("userData", userData);
 
-    // 更新用户使用额度
-    const userData = wx.getStorageSync("userData") || {};
-    userData.usedAmount = (userData.usedAmount || 0) + this.data.totalPrice;
-    wx.setStorageSync("userData", userData);
+          wx.showToast({
+            title: "订单提交成功",
+            icon: "success",
+            duration: 1500,
+            success: () => {
+              // 重置商品数量和总价
+              const goodsList = this.data.goodsList.map((item) => ({
+                ...item,
+                count: 0,
+              }));
 
-    wx.showToast({
-      title: "订单提交成功",
-      icon: "success",
-      duration: 1500,
-      success: () => {
-        // 重置商品数量和总价
-        const goodsList = this.data.goodsList.map((item) => ({
-          ...item,
-          count: 0,
-        }));
-
-        this.setData({
-          goodsList: goodsList,
-          totalPrice: 0,
-          remainingLimit: this.data.dailyLimit - userData.usedAmount,
+              this.setData({
+                goodsList: goodsList,
+                totalPrice: 0,
+                remainingLimit: this.data.dailyLimit - userData.usedAmount,
+              });
+            },
+          });
+        } else {
+          wx.showToast({
+            title: "订单提交失败",
+            icon: "none",
+          });
+        }
+      },
+      fail: (err) => {
+        console.error("订单提交失败:", err);
+        wx.showToast({
+          title: "订单提交失败，请检查网络连接",
+          icon: "none",
         });
       },
     });
