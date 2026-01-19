@@ -45,5 +45,7 @@ const PORT = process.env.PORT || 3000;
 
 // 启动服务器
 app.listen(PORT, () => {
-  console.log(`服务器正在运行在 http://localhost:${PORT}`);
+  console.log(
+    `服务器正在运行在 http://localhost:${PORT} 和 http://lijunpeng.top:${PORT}`,
+  );
 });

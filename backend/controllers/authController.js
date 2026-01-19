@@ -28,7 +28,7 @@ const login = async (req, res) => {
       { username: "侯晨轩", password: "123456", role: "user" },
     ];
 
-    // 首先检查模拟用户列表，快速返回结果
+    // 直接使用模拟登录，快速返回结果，不再尝试访问数据库
     const mockUser = mockUsers.find(
       (item) => item.username === username && item.password === password
     );
@@ -50,43 +50,7 @@ const login = async (req, res) => {
         role: mockUser.role,
         token: mockToken,
       });
-      return;
-    }
-
-    // 如果模拟用户列表中没有找到，再尝试从数据库查找用户
-    try {
-      // 设置较短的超时时间，避免长时间等待
-      const user = await User.findOne({ username: username.toLowerCase() })
-        .lean()
-        .exec();
-
-      if (!user) {
-        return res.status(401).json({ message: "用户名或密码错误" });
-      }
-
-      // 验证密码
-      const isPasswordMatch = await User.findById(user._id)
-        .select("password")
-        .exec()
-        .then((userDoc) => userDoc.matchPassword(password));
-
-      if (!isPasswordMatch) {
-        return res.status(401).json({ message: "用户名或密码错误" });
-      }
-
-      // 生成令牌
-      const token = generateToken(user._id);
-
-      // 返回用户信息和令牌
-      res.status(200).json({
-        id: user._id,
-        username: user.username,
-        role: user.role,
-        token,
-      });
-    } catch (dbError) {
-      // 数据库连接失败时，返回错误
-      console.log("数据库连接失败，使用模拟登录");
+    } else {
       return res.status(401).json({ message: "用户名或密码错误" });
     }
   } catch (error) {

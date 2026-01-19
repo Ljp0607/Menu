@@ -2,7 +2,7 @@
 App({
   globalData: {
     // API基础URL
-    apiBaseUrl: 'http://localhost:3000/api',
+    apiBaseUrl: "http://www.lijunpeng.top:3000/api",
     // 用户数据
     userData: {
       today: new Date().toDateString(),
@@ -27,26 +27,30 @@ App({
 
   onShow: function () {
     // 检查登录状态
-    const isLoggedIn = wx.getStorageSync('isLoggedIn');
+    const isLoggedIn = wx.getStorageSync("isLoggedIn");
     const currentPage = getCurrentPages()[0];
-    
+
     // 如果不是登录页面且未登录，跳转到登录页面
-    if (currentPage && currentPage.route !== 'pages/login/index' && !isLoggedIn) {
+    if (
+      currentPage &&
+      currentPage.route !== "pages/login/index" &&
+      !isLoggedIn
+    ) {
       wx.redirectTo({
-        url: '/pages/login/index'
+        url: "/pages/login/index",
       });
       return;
     }
-    
+
     // 已登录，根据用户角色和当前页面进行权限控制
     if (isLoggedIn) {
-      const userType = wx.getStorageSync('userType');
-      const currentRoute = currentPage ? currentPage.route : '';
-      
+      const userType = wx.getStorageSync("userType");
+      const currentRoute = currentPage ? currentPage.route : "";
+
       // 管理员不能访问商品页面
-      if (userType === 'admin' && currentRoute === 'pages/goods/index') {
+      if (userType === "admin" && currentRoute === "pages/goods/index") {
         wx.switchTab({
-          url: '/pages/orders/index'
+          url: "/pages/orders/index",
         });
       }
     }

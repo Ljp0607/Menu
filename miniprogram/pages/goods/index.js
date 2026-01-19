@@ -300,10 +300,16 @@ Page({
       totalPrice: this.data.totalPrice,
     };
 
+    // 获取token
+    const token = wx.getStorageSync('token');
+    
     // 发送请求到后端API
     wx.request({
       url: app.globalData.apiBaseUrl + "/orders",
       method: "POST",
+      header: {
+        'Authorization': 'Bearer ' + token
+      },
       data: orderData,
       success: (res) => {
         if (res.statusCode === 201) {
